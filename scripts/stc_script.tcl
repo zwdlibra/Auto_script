@@ -1,0 +1,1 @@
+return $::stc::scriptParameters(-Ret)

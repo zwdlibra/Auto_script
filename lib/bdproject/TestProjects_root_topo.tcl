@@ -37,28 +37,21 @@ proc Topo_TestCase_root { testCaseName moduleName projectName } {
 }
 
 proc Topo_TestCase_start { testCaseName moduleName projectName } {
+    Topo_TestCase_start_cmds "${testCaseName}_config_dut"
     if {[catch {
-        $::logger info "======${::global_module_proc_prefix}_${testCaseName}_config_dut======"
-        eval [concat ${::global_module_proc_prefix}_${testCaseName}_config_dut]
-
-        $::logger info "======${::global_module_proc_prefix}_${testCaseName}======"
-        set ret [eval [concat ${::global_module_proc_prefix}_${testCaseName}]]
-
-        $::logger info "======${::global_module_proc_prefix}_${testCaseName}_cleanconfig_dut======"
-        eval [concat ${::global_module_proc_prefix}_${testCaseName}_cleanconfig_dut]
+        set ret [Topo_TestCase_start_cmds $testCaseName]
     } errMsg]} {
-        if {[Topo_TestCase_start_OnError $errMsg]} {
-            error $errMsg $::errorInfo
-        }
-        $::logger error "$errMsg\nCall procedure-- :\n$::errorInfo\n"
-        TestProjects_set_global_result -1 $projectName $moduleName $testCaseName
-    } else {
-        TestProjects_set_global_result $ret $projectName $moduleName $testCaseName
+        $::logger error "$errMsg\n$::errorInfo\n"
+        set ret -1
     }
+    Topo_TestCase_start_cmds "${testCaseName}_cleanconfig_dut"
+    TestProjects_set_global_result $ret $projectName $moduleName $testCaseName
 }
 
-proc Topo_TestCase_start_OnError { message } {
-    return 1
+proc Topo_TestCase_start_cmds { suffix } {
+    set procName "${::global_module_proc_prefix}_${suffix}"
+    $::logger info "====== $procName ======"
+    return [$procName]
 }
 
 proc Topo_TestModule_init { moduleName projectName } {

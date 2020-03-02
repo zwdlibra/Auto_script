@@ -8,12 +8,12 @@
 switch -exact -- $tcl_platform(osVersion) {
     "5.1" -
     "6.1" {
-        set Bd_expect_settings(TELNET_CLI) [list [file join $env(APP_PATH) "plink.exe"] -raw "%s" -P "%s"]
+        set Bd_expect_settings(TELNET_CLI) [list [file join $env(APP_PATH) "bin" "plink.exe"] -raw "%s" -P "%s"]
         set Bd_expect_settings(NUL) \000
     }
     "10.0" -
     default {
-        set Bd_expect_settings(TELNET_CLI) [list [file join $env(APP_PATH) "telnet.exe"] "%s" "%s"]
+        set Bd_expect_settings(TELNET_CLI) [list [file join $env(APP_PATH) "bin" "telnet.exe"] "%s" "%s"]
         set Bd_expect_settings(NUL) \040
     }
 }
